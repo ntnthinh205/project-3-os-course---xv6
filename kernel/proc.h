@@ -81,6 +81,10 @@ struct trapframe {
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+#ifdef LAB_PGTBL
+struct usyscall;
+#endif
+
 // Per-process state
 struct proc {
   struct spinlock lock;
@@ -91,6 +95,9 @@ struct proc {
   int killed;                  // If non-zero, have been killed
   int xstate;                  // Exit status to be returned to parent's wait
   int pid;                     // Process ID
+#ifdef LAB_PGTBL
+  struct usyscall *usyscall;    // Read-only page shared with user space
+#endif
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process
